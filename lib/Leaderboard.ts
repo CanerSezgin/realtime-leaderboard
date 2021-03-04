@@ -1,62 +1,44 @@
-import { promisify } from "util"
+import CustomRedisClient from "./CustomRedisClient"
 
 type LeaderboardOptions = {}
-
-enum RedisClientType {
-    RedisClient = "RedisClient",
-    Redis = "Redis"
-}
-
-class CustomRedisClient {
-    private type: RedisClientType;
-    public client;
-    constructor(redisClient: any) {
-        this.type = this.getClientType(redisClient)
-        this.client = this.setClient(redisClient)
-    }
-
-    private getClientType(redisClient: any): RedisClientType {
-        return redisClient.constructor.name
-    }
-
-    private setClient(redisClient: any) {
-        if (this.type === RedisClientType.RedisClient) {
-            return {
-                get: promisify(redisClient.get).bind(redisClient),
-                set: promisify(redisClient.set).bind(redisClient),
-                del: promisify(redisClient.del).bind(redisClient),
-                zrange: promisify(redisClient.zrange).bind(redisClient),
-                zadd: promisify(redisClient.zadd).bind(redisClient),
-                zscore: promisify(redisClient.zscore).bind(redisClient),
-                zrevrange: promisify(redisClient.ZREVRANGE).bind(redisClient),
-                zrevrank: promisify(redisClient.zrevrank).bind(redisClient),
-            }
-        } else if (this.type === RedisClientType.Redis) {
-            return {
-                get: () => { },
-                set: () => { },
-                del: () => { },
-                zrange: () => { },
-                zadd: () => { },
-                zscore: () => { },
-                zrevrange: () => { },
-                zrevrank: () => { },
-            }
-        } else {
-            throw Error("Redis client is not supported. Supported Clients: { redis, ioredis }")
-        }
-    }
-
-}
+type userId = string | number;
 
 export default class Leaderboard {
-    private client: CustomRedisClient
-    constructor(private redisClient: any, public boardId: string, private opts: LeaderboardOptions) {
-        this.client = new CustomRedisClient(redisClient)
+    private client;
+    constructor(redisClient: any, public boardId: string, private opts: LeaderboardOptions) {
+        this.client = new CustomRedisClient(redisClient).client
     }
 
-    hi(){
-        console.log(this.client)
+    async addUser(userId: userId, score: number) {
+        return this.client.zadd(this.boardId, score, userId)
     }
-
+    async getScore(userId: userId) {
+        return this.client.zscore(this.boardId, userId)
+    }
+    async getRank(userId: userId) {
+        return this.client.zrevrank(this.boardId, userId);
+    }
+    async getBetween(startRank: number = 0, endRank: number = -1) {
+        const result = await this.client.zrevrange(
+          this.boardId,
+          startRank,
+          endRank - 1,
+          "WITHSCORES"
+        );
+        return this.zrevrangeResponse(result, startRank);
+    }
+    private zrevrangeResponse(rangeResponse: string[], startRank: number) {
+        const response = [];
+        const userIds = rangeResponse.filter((el, index) => index % 2 === 0);
+        const scores = rangeResponse.filter((el, index) => index % 2 === 1);
+    
+        for (let i = 0; i < userIds.length; i++) {
+          response.push({
+            userId: userIds[i],
+            score: scores[i],
+            rank: startRank + i,
+          });
+        }
+        return response;
+      }
 }
