@@ -1,8 +1,5 @@
 import CustomRedisClient from "./CustomRedisClient"
-
-type LeaderboardOptions = {}
-type userId = string | number;
-
+import { LeaderboardOptions, userId } from "./types"
 export default class Leaderboard {
   private client;
   public clientType;
@@ -17,7 +14,8 @@ export default class Leaderboard {
     return this.client.zadd(this.boardId, score, userId)
   }
   async getScore(userId: userId) {
-    return this.client.zscore(this.boardId, userId)
+    const score = await this.client.zscore(this.boardId, userId)
+    return parseFloat(score)
   }
   async getRank(userId: userId) {
     return this.client.zrevrank(this.boardId, userId);
@@ -39,7 +37,7 @@ export default class Leaderboard {
     for (let i = 0; i < userIds.length; i++) {
       response.push({
         userId: userIds[i],
-        score: scores[i],
+        score: parseFloat(scores[i]),
         rank: startRank + i,
       });
     }
