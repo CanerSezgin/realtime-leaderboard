@@ -6,8 +6,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon --watch 'lib/**/*.ts' --ignore 'lib/**/*.spec.ts' --exec 'ts-node' lib/index.ts",
-    "test": "jest"
+    "dev": "nodemon --watch 'lib/**/*.ts' --ignore 'lib/**/*.spec.ts' --exec 'ts-node' lib/index.ts --exec 'jest --detectOpenHandles || true'",
+    "test": "jest --detectOpenHandles",
+    "test:coverage": "jest --detectOpenHandles --coverage"
   },
   "keywords": [
     "leaderboard",

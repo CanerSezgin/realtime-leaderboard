@@ -1,6 +1,6 @@
 import { promisify } from "util"
 
-enum RedisClientType {
+export enum RedisClientType {
     RedisClient = "RedisClient",
     Redis = "Redis"
 }

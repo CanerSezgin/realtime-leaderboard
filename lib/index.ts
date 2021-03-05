@@ -22,7 +22,7 @@ const options = {}
 
 const ioRedisClient = new ioredis(config)
 
-const lb1 = new Leaderboard(redisClient, 'lbId', options)
+/* const lb1 = new Leaderboard(redisClient, 'lbId', options)
 const lb2 = new Leaderboard(ioRedisClient, "lb2", options)
 
 const customClient1 = new CustomRedisClient(redisClient)
@@ -45,5 +45,5 @@ const main = async () => {
 
 }
 
-main();
+main(); */
 

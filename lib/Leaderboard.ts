@@ -5,10 +5,12 @@ type userId = string | number;
 
 export default class Leaderboard {
   private client;
+  public clientType;
   constructor(redisClient: any, public boardId: string, private opts: LeaderboardOptions) {
     this.client = redisClient instanceof CustomRedisClient ?
       redisClient :
       new CustomRedisClient(redisClient)
+    this.clientType = this.client.type;
   }
 
   async addUser(userId: userId, score: number) {
