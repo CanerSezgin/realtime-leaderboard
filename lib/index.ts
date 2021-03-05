@@ -19,7 +19,7 @@ redisClient.on("ready", () => {
 });
 
 const options: LeaderboardOptions = {
-    update: LeaderboardUpdateOptions.onlyCreate
+    update: LeaderboardUpdateOptions.createOnly
 }
 
 const ioRedisClient = new ioredis(config)

@@ -2,16 +2,16 @@ import CustomRedisClient from "./CustomRedisClient"
 import { userId, UserInLeaderboard } from "./types"
 
 export enum _LeaderboardUpdateOptions {
-  onlyUpdate = "XX",
-  onlyCreate = "NX",
+  updateOnly = "XX",
+  createOnly = "NX",
   createAndUpdateIfLess = "LT",
   createAndUpdateIfGrater = "GT",
   createAndIncrement = "INCR"
 }
 
 export enum LeaderboardUpdateOptions {
-  onlyUpdate = "onlyUpdate",
-  onlyCreate = "onlyCreate",
+  updateOnly = "updateOnly",
+  createOnly = "createOnly",
   createAndUpdateIfLess = "createAndUpdateIfLess",
   createAndUpdateIfGrater = "createAndUpdateIfGrater",
   createAndIncrement = "createAndIncrement"
@@ -31,18 +31,21 @@ export default class Leaderboard {
   }
 
   private static getUpdateOption(optionInput: LeaderboardUpdateOptions) {
-    const defaultOpts = _LeaderboardUpdateOptions.onlyCreate;
+    const defaultOpts = _LeaderboardUpdateOptions.createOnly;
     return _LeaderboardUpdateOptions[optionInput] || defaultOpts;
   }
 
-  async addUser(userId: userId, score: number) {
+  async createUser(userId: userId, score: number) {
+    const updateOption = Leaderboard.getUpdateOption(LeaderboardUpdateOptions.createOnly);
+    return this.client.zadd(this.boardId, updateOption, score, userId)
+  }
+  async updateUser(userId: userId, score: number)  {
     const updateOption = Leaderboard.getUpdateOption(this.opts.update)
-    console.log({ updateOption })
     return this.client.zadd(this.boardId, updateOption, score, userId)
   }
   async getScore(userId: userId) {
     const score = await this.client.zscore(this.boardId, userId)
-    return parseFloat(score)
+    return score ? parseFloat(score) : null
   }
   async getRank(userId: userId) {
     const rank = await this.client.zrevrank(this.boardId, userId);
