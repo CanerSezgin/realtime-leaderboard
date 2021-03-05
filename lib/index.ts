@@ -1,6 +1,7 @@
 import redis from "redis"
 import ioredis from "ioredis"
 import Leaderboard from "./Leaderboard"
+import CustomRedisClient from "./CustomRedisClient";
 
 const config = {
     host: "localhost",
@@ -23,6 +24,10 @@ const ioRedisClient = new ioredis(config)
 
 const lb1 = new Leaderboard(redisClient, 'lbId', options)
 const lb2 = new Leaderboard(ioRedisClient, "lb2", options)
+
+const customClient1 = new CustomRedisClient(redisClient)
+const lb3 = new Leaderboard(customClient1, "lb3", options)
+console.log(lb3)
 
 const main = async () => {
     const user1 = await lb1.addUser("user1", 5)

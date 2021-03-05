@@ -4,58 +4,51 @@ enum RedisClientType {
     RedisClient = "RedisClient",
     Redis = "Redis"
 }
-
-type CustomRedisClientType = {
-    get: Function,
-    set: Function,
-    del: Function,
-    zrange: Function,
-    zadd: Function,
-    zscore: Function,
-    zrevrange: Function,
-    zrevrank: Function
-}
-
 class CustomRedisClient {
-    private type: RedisClientType;
-    public client;
+    public type: RedisClientType
+    public get: Function
+    public set: Function
+    public del: Function
+    public zrange: Function
+    public zadd: Function
+    public zscore: Function
+    public zrevrange: Function
+    public zrevrank: Function
     constructor(redisClient: any) {
-        this.type = this.getClientType(redisClient)
-        this.client = this.setClient(redisClient)
+        const clientType = CustomRedisClient.getClientType(redisClient);
+        this.init(redisClient, clientType)
     }
 
-    private getClientType(redisClient: any): RedisClientType {
+    private static getClientType(redisClient: any): RedisClientType {
         return redisClient.constructor.name
     }
 
-    private setClient(redisClient: any): CustomRedisClientType {
-        if (this.type === RedisClientType.RedisClient) {
-            return {
-                get: promisify(redisClient.get).bind(redisClient),
-                set: promisify(redisClient.set).bind(redisClient),
-                del: promisify(redisClient.del).bind(redisClient),
-                zrange: promisify(redisClient.zrange).bind(redisClient),
-                zadd: promisify(redisClient.zadd).bind(redisClient),
-                zscore: promisify(redisClient.zscore).bind(redisClient),
-                zrevrange: promisify(redisClient.ZREVRANGE).bind(redisClient),
-                zrevrank: promisify(redisClient.zrevrank).bind(redisClient),
-            }
-        } else if (this.type === RedisClientType.Redis) {
-            return {
-                get: () => { },
-                set: () => { },
-                del: () => { },
-                zrange: () => { },
-                zadd: () => { },
-                zscore: () => { },
-                zrevrange: () => { },
-                zrevrank: () => { },
-            }
+    private init(redisClient: any, type: RedisClientType) {
+        if (type === RedisClientType.RedisClient) {
+            this.type = type
+            this.get = promisify(redisClient.get).bind(redisClient)
+            this.set = promisify(redisClient.set).bind(redisClient)
+            this.del = promisify(redisClient.del).bind(redisClient)
+            this.zrange = promisify(redisClient.zrange).bind(redisClient)
+            this.zadd = promisify(redisClient.zadd).bind(redisClient)
+            this.zscore = promisify(redisClient.zscore).bind(redisClient)
+            this.zrevrange = promisify(redisClient.ZREVRANGE).bind(redisClient)
+            this.zrevrank = promisify(redisClient.zrevrank).bind(redisClient)
+
+        } else if (type === RedisClientType.Redis) {
+            this.type = type;
+            this.get = () => { }
+            this.set = () => { }
+            this.del = () => { }
+            this.zrange = () => { }
+            this.zadd = () => { }
+            this.zscore = () => { }
+            this.zrevrange = () => { }
+            this.zrevrank = () => { }
         } else {
             throw Error("Redis client is not supported. Supported Clients: { redis, ioredis }")
         }
     }
-
 }
 
 export default CustomRedisClient
