@@ -1,6 +1,6 @@
 {
   "name": "realtime-leaderboard",
-  "version": "0.6.8",
+  "version": "0.6.11",
   "description": "Real-time powerful leaderboard with Redis",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,6 +29,9 @@
     "real-time"
   ],
   "author": "Caner Sezgin <ccanersezgin@gmail.com>",
+  "repository": "https://github.com/CanerSezgin/realtime-leaderboard",
+  "homepage": "https://github.com/CanerSezgin/realtime-leaderboard",
+  "bugs": "https://github.com/CanerSezgin/realtime-leaderboard/issues",
   "license": "MIT",
   "devDependencies": {
     "@types/ioredis": "^4.22.0",
