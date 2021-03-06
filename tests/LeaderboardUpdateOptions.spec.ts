@@ -1,16 +1,16 @@
 import { redisClient } from "./redisClients"
 import { LBTestMethods } from "./helper/leaderboardHelpers"
-import Leaderboard, { LeaderboardOptions, LeaderboardUpdateOptions } from "../lib/Leaderboard"
+import { Leaderboard, LeaderboardOptions, LeaderboardUpdateOptions } from "../lib/Leaderboard"
 import { createUserWithScore } from "./helper/user"
 
 describe('Leaderboard Update Options Tests (redis)', () => {
     describe('createOnly', () => {
         const user = createUserWithScore();
-        const leaderboardId = "leaderboard_test_redis_createOnly"
+        const leaderleaderboardId = "leaderboard_test_redis_createOnly"
         const lbOptions: LeaderboardOptions = {
             update: LeaderboardUpdateOptions.createOnly
         }
-        const LB = new Leaderboard(redisClient, leaderboardId, lbOptions)
+        const LB = new Leaderboard(redisClient, leaderleaderboardId, lbOptions)
 
         it("create user", async () => {
             const { userId, score } = user;
@@ -29,11 +29,11 @@ describe('Leaderboard Update Options Tests (redis)', () => {
 
     describe('updateOnly', () => {
         const user = createUserWithScore();
-        const leaderboardId = "leaderboard_test_redis_updateOnly"
+        const leaderleaderboardId = "leaderboard_test_redis_updateOnly"
         const lbOptions: LeaderboardOptions = {
             update: LeaderboardUpdateOptions.updateOnly
         }
-        const LB = new Leaderboard(redisClient, leaderboardId, lbOptions)
+        const LB = new Leaderboard(redisClient, leaderleaderboardId, lbOptions)
 
         it("update non-existing user's result", async () => {
             const { userId } = user
@@ -60,11 +60,11 @@ describe('Leaderboard Update Options Tests (redis)', () => {
 
     describe('createAndUpdateIfLess', () => {
         const user = createUserWithScore();
-        const leaderboardId = "leaderboard_test_redis_createAndUpdateIfLess"
+        const leaderleaderboardId = "leaderboard_test_redis_createAndUpdateIfLess"
         const lbOptions: LeaderboardOptions = {
             update: LeaderboardUpdateOptions.createAndUpdateIfLess
         }
-        const LB = new Leaderboard(redisClient, leaderboardId, lbOptions)
+        const LB = new Leaderboard(redisClient, leaderleaderboardId, lbOptions)
 
         it("create user", async () => {
             const { userId, score } = user;
@@ -119,11 +119,11 @@ describe('Leaderboard Update Options Tests (redis)', () => {
 
     describe('createAndUpdateIfGrater', () => {
         const user = createUserWithScore();
-        const leaderboardId = "leaderboard_test_redis_createAndUpdateIfGrater"
+        const leaderleaderboardId = "leaderboard_test_redis_createAndUpdateIfGrater"
         const lbOptions: LeaderboardOptions = {
             update: LeaderboardUpdateOptions.createAndUpdateIfGrater
         }
-        const LB = new Leaderboard(redisClient, leaderboardId, lbOptions)
+        const LB = new Leaderboard(redisClient, leaderleaderboardId, lbOptions)
 
         it("create user", async () => {
             const { userId, score } = user;
@@ -179,11 +179,11 @@ describe('Leaderboard Update Options Tests (redis)', () => {
 
     describe('createAndIncrement', () => {
         const user = createUserWithScore();
-        const leaderboardId = "leaderboard_test_redis_createAndIncrement"
+        const leaderleaderboardId = "leaderboard_test_redis_createAndIncrement"
         const lbOptions: LeaderboardOptions = {
             update: LeaderboardUpdateOptions.createAndIncrement
         }
-        const LB = new Leaderboard(redisClient, leaderboardId, lbOptions)
+        const LB = new Leaderboard(redisClient, leaderleaderboardId, lbOptions)
 
         it("create user", async () => {
             const { userId, score } = user;

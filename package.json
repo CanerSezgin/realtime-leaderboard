@@ -1,15 +1,23 @@
 {
   "name": "realtime-leaderboard",
-  "version": "0.1.0",
+  "version": "0.6.3",
   "description": "Real-time powerful leaderboard with Redis",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "nodemon --watch 'lib/**/*.ts' --ignore 'lib/**/*.spec.ts' --exec 'ts-node' lib/index.ts --exec 'jest --detectOpenHandles || true'",
+    "publish": "npm run build && npm publish",
+    "version:patch": "npm --no-git-tag-version version patch",
+    "version:minor": "npm --no-git-tag-version version minor",
+    "version:major": "npm --no-git-tag-version version major",
     "test": "jest --detectOpenHandles",
     "test:coverage": "jest --detectOpenHandles --coverage"
   },
+  
   "keywords": [
     "leaderboard",
     "scoreboard",

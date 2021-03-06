@@ -1,12 +1,12 @@
 import { redisClient } from "./redisClients"
 import { RedisClientType } from "../lib/CustomRedisClient"
-import Leaderboard, { LeaderboardOptions, LeaderboardUpdateOptions } from "../lib/Leaderboard"
+import { Leaderboard, LeaderboardOptions, LeaderboardUpdateOptions } from "../lib/Leaderboard"
 import { createUsersWithScore } from "./helper/user"
 import { LBTestMethods, getIndexOfUser, getSortedList, getUsersBetween } from "./helper/leaderboardHelpers"
 
 describe('Leaderboard with (redis). Happy Path Tests', () => {
     let LB: Leaderboard;
-    const leaderboardId = "leaderboard_test_redis"
+    const leaderleaderboardId = "leaderboard_test_redis"
     const lbOptions: LeaderboardOptions = {
         update: LeaderboardUpdateOptions.createOnly
     }
@@ -14,9 +14,9 @@ describe('Leaderboard with (redis). Happy Path Tests', () => {
     const firstUser = users[0];
 
     it("create leaderboard with 'redis'", async () => {
-        LB = new Leaderboard(redisClient, leaderboardId, lbOptions)
+        LB = new Leaderboard(redisClient, leaderleaderboardId, lbOptions)
         expect(LB).toEqual(expect.objectContaining({
-            boardId: leaderboardId,
+            leaderboardId: leaderleaderboardId,
             opts: expect.any(Object),
             client: expect.any(Object),
             clientType: RedisClientType.RedisClient
@@ -38,6 +38,14 @@ describe('Leaderboard with (redis). Happy Path Tests', () => {
 
     it("get rank of user", async () => {
         await LBTestMethods(LB).getRank(firstUser.userId, getIndexOfUser(users, firstUser.userId))
+    })
+
+    it("get score and rank of non-existing user", async () => {
+        const userId = "non-existing-user";
+        const score = await LB.getScore(userId)
+        const rank = await LB.getRank(userId)
+        expect(score).toBe(null);
+        expect(rank).toBe(null)
     })
 
     it("get full list", async () => {

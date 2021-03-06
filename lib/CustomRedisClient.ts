@@ -4,7 +4,7 @@ export enum RedisClientType {
     RedisClient = "RedisClient",
     Redis = "Redis"
 }
-class CustomRedisClient {
+export class CustomRedisClient {
     public type: RedisClientType
     public get: Function
     public set: Function
@@ -46,9 +46,10 @@ class CustomRedisClient {
             this.zrevrange = () => { }
             this.zrevrank = () => { }
         } else {
-            throw Error("Redis client is not supported. Supported Clients: { redis, ioredis }")
+            throw Error(`Redis client is not supported. Supported Clients: { redis, ioredis }
+            Install One of Redis Packages
+            >>> npm install redis
+            >>> npm install ioredis`)
         }
     }
 }
-
-export default CustomRedisClient

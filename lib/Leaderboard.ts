@@ -1,4 +1,4 @@
-import CustomRedisClient from "./CustomRedisClient"
+import { CustomRedisClient } from "./CustomRedisClient"
 import { userId, UserInLeaderboard } from "./types"
 
 export enum _LeaderboardUpdateOptions {
@@ -17,43 +17,97 @@ export enum LeaderboardUpdateOptions {
   createAndIncrement = "createAndIncrement"
 }
 
+export type LeaderboardUpdateOptionsType = "updateOnly" | "createOnly" | "createAndUpdateIfLess" |
+  "createAndUpdateIfGrater" | "createAndIncrement"
+
 export type LeaderboardOptions = {
-  update: LeaderboardUpdateOptions
+  update: LeaderboardUpdateOptionsType
 }
-export default class Leaderboard {
+
+export class Leaderboard {
   private client;
   public clientType;
-  constructor(redisClient: any, public boardId: string, private opts: LeaderboardOptions) {
+  constructor(redisClient: any, public leaderboardId: string, private opts: LeaderboardOptions) {
     this.client = redisClient instanceof CustomRedisClient ?
       redisClient :
       new CustomRedisClient(redisClient)
     this.clientType = this.client.type;
   }
 
-  private static getUpdateOption(optionInput: LeaderboardUpdateOptions) {
+  private static getUpdateOption(optionInput: LeaderboardUpdateOptionsType) {
     const defaultOpts = _LeaderboardUpdateOptions.createOnly;
     return _LeaderboardUpdateOptions[optionInput] || defaultOpts;
   }
 
-  async createUser(userId: userId, score: number) {
+  // TODO: async resetLB() {}
+
+  // TODO: async getNoOfUsers() {}
+
+  /**
+   * Create User in Leaderboard
+   * 
+   * @param userId - Unique User Identifier (ex: userId, username, email)
+   * @param score - User's Score/Point
+   */
+  async createUser(userId: string | number, score: number): Promise<0 | 1> {
     const updateOption = Leaderboard.getUpdateOption(LeaderboardUpdateOptions.createOnly);
-    return this.client.zadd(this.boardId, updateOption, score, userId)
+    return this.client.zadd(this.leaderboardId, updateOption, score, userId)
   }
-  async updateUser(userId: userId, score: number)  {
+
+  /**
+   * Update/Upsert User Record. According to LeaderboardUpdateOption selection. 
+   * 
+   * "updateOnly" : Never allows you to create new records if user doesn't exist.
+   * 
+   * "createOnly" : Never allows you to update any user score.
+   * 
+   * "createAndUpdateIfLess" : If user not exist, creates records, otherwise updates if new score 
+   * is less than current one.
+   * 
+   * "createAndUpdateIfGrater" : If user not exist, creates records, otherwise updates if new score 
+   * is greater than current one.
+   * 
+   * "createAndIncrement" : If user not exist, creates records, otherwise adds up new score.
+   * 
+   * @param userId - Unique User Identifier (ex: userId, username, email)
+   * @param score - User's Score/Point
+   */
+  async updateUser(userId: string | number, score: number) {
     const updateOption = Leaderboard.getUpdateOption(this.opts.update)
-    return this.client.zadd(this.boardId, updateOption, score, userId)
+    return this.client.zadd(this.leaderboardId, updateOption, score, userId)
   }
-  async getScore(userId: userId) {
-    const score = await this.client.zscore(this.boardId, userId)
-    return score ? parseFloat(score) : null
+
+  /**
+   * Get User's Score by user identifier.
+   * 
+   * @param userId - Unique User Identifier (ex: userId, username, email)
+   */
+  async getScore(userId: number | string): Promise<number | null> {
+    const score = await this.client.zscore(this.leaderboardId, userId)
+    return score == null || score === undefined ? null : parseFloat(score);
   }
-  async getRank(userId: userId) {
-    const rank = await this.client.zrevrank(this.boardId, userId);
-    return rank + 1;
+
+  /**
+   * Get User's Rank by user identifier. Min: 1
+   * 
+   * @param userId - Unique User Identifier (ex: userId, username, email)
+   */
+  async getRank(userId: number | string): Promise<number | null> {
+    const rank = await this.client.zrevrank(this.leaderboardId, userId);
+    return rank == null || rank === undefined ? null : rank + 1;
   }
-  async getListBetween(startRank: number = 1, endRank: number = 0) {
+
+  /**
+   * It returns users between startRank [included] & endRank [included]
+   * 
+   * Default: Returns whole leaderboard.
+   * 
+   * @param startRank - Min: 1
+   * @param endRank 
+   */
+  async getListBetween(startRank: number = 1, endRank: number = 0): Promise<{ userId: number | string, score: number, rank: number }[]> {
     const result = await this.client.zrevrange(
-      this.boardId,
+      this.leaderboardId,
       startRank - 1,
       endRank - 1,
       "WITHSCORES"

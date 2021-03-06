@@ -1,7 +1,6 @@
 import redis from 'redis';
 import ioredis from "ioredis";
 import { promisify } from 'util';
-import CustomRedisClient from "../lib/CustomRedisClient"
 
 const config = {
     host: "localhost",
@@ -29,9 +28,6 @@ const redisClientHelpers = {
 }
 
 export const ioRedisClient = new ioredis(config);
-
-export const clientForRedis = new CustomRedisClient(redisClient)
-export const clientForIORedis = new CustomRedisClient(ioRedisClient)
 
 beforeAll(async () => {
     console.log("beforeAll")
