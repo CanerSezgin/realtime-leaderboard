@@ -71,6 +71,19 @@ describe.each([
         const start = 2;
         const end = 4;
         const expectedList = getUsersBetween(users, start, end)
-        const list = await LBTestMethods(LB).getListBetween(start, end, expectedList);
+        await LBTestMethods(LB).getListBetween(start, end, expectedList);
+    })
+
+    it("get number of users in the leaderboard", async () => {
+        const noOfUsers = await LB.getNoOfUsers()
+        expect(noOfUsers).toBe(users.length)
+    })
+
+    it("reset leaderboard", async () => {
+        const list = await LB.getListBetween();
+        expect(list.length).not.toBe(0);
+        await LB.resetLeaderboard();
+        const listAfterReset = await LB.getListBetween();
+        expect(listAfterReset.length).toBe(0)
     })
 })

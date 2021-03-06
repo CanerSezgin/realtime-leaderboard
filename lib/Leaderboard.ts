@@ -54,9 +54,13 @@ export class Leaderboard {
     return _LeaderboardUpdateOptions[optionInput] || defaultOpts;
   }
 
-  // TODO: async resetLB() {}
+  async resetLeaderboard() {
+    return this.client.zremrangebyrank(this.leaderboardId, 0, -1)
+  }
 
-  // TODO: async getNoOfUsers() {}
+  async getNoOfUsers() {
+    return this.client.zcount(this.leaderboardId, "-inf", "+inf")
+  }
 
   /**
    * Create User in Leaderboard
@@ -127,7 +131,6 @@ export class Leaderboard {
       endRank - 1,
       "WITHSCORES"
     );
-    console.log({result})
     return Leaderboard.zrevrangeResponse(result, startRank);
   }
   private static zrevrangeResponse(rangeResponse: string[], startRank: number): UserInLeaderboard[] {
