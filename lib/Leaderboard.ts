@@ -51,7 +51,7 @@ export class Leaderboard {
 
   private static getUpdateOption(optionInput: LeaderboardUpdateOptionsType) {
     const defaultOpts = _LeaderboardUpdateOptions.updateOnly;
-    return _LeaderboardUpdateOptions[optionInput] || defaultOpts;
+    return _LeaderboardUpdateOptions[optionInput] || defaultOpts; /* istanbul ignore file */
   }
 
   async resetLeaderboard() {

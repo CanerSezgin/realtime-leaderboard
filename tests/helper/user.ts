@@ -1,9 +1,8 @@
-import { User } from "../../lib/types"
 import uniqueNameGenerator from "./uniqueNameGenerator"
 
 export const createUser = () => {
     const userId = uniqueNameGenerator();
-    return new User(userId)
+    return { userId, score: 0 }
 }
 
 export const createScore = () => {

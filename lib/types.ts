@@ -5,6 +5,3 @@ export type UserInLeaderboard = {
     score: number;
     rank: number;
 }
-export class User {
-    constructor(public userId: userId, public score: number = 0) { }
-}

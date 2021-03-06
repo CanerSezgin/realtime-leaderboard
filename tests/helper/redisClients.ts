@@ -10,7 +10,7 @@ const config = {
 
 export const redisClient = redis.createClient(config)
     .on('error', function (err) {
-        console.log("error", err);
+        console.log("error", err); /* istanbul ignore file */
     })
     .on('connect', function () { })
 

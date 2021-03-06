@@ -1,4 +1,4 @@
-import { redisClient, ioRedisClient } from "./redisClients"
+import { redisClient, ioRedisClient } from "./helper/redisClients"
 import { LBTestMethods } from "./helper/leaderboardHelpers"
 import { Leaderboard, LeaderboardOptions, LeaderboardUpdateOptions } from "../lib/Leaderboard"
 import { createUserWithScore } from "./helper/user"
