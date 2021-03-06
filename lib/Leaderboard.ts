@@ -24,9 +24,24 @@ export type LeaderboardOptions = {
   update: LeaderboardUpdateOptionsType
 }
 
+/**
+ * Leaderboard Class
+ */
 export class Leaderboard {
   private client;
   public clientType;
+  /**
+   * Leaderboard class constructor
+   * 
+   * @param redisClient - redisClient >>> Supports
+   * 
+   * Redis {@link https://www.npmjs.com/package/redis}
+   * 
+   * ioRedis {@link https://www.npmjs.com/package/ioredis}
+   * 
+   * @param leaderboardId - Leaderboard Identifier
+   * @param opts - Leaderboard Options 
+   */
   constructor(redisClient: any, public leaderboardId: string, private opts: LeaderboardOptions) {
     this.client = redisClient instanceof CustomRedisClient ?
       redisClient :
@@ -35,7 +50,7 @@ export class Leaderboard {
   }
 
   private static getUpdateOption(optionInput: LeaderboardUpdateOptionsType) {
-    const defaultOpts = _LeaderboardUpdateOptions.createOnly;
+    const defaultOpts = _LeaderboardUpdateOptions.updateOnly;
     return _LeaderboardUpdateOptions[optionInput] || defaultOpts;
   }
 
