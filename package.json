@@ -1,6 +1,6 @@
 {
   "name": "realtime-leaderboard",
-  "version": "0.6.11",
+  "version": "0.8.1",
   "description": "Real-time powerful leaderboard with Redis",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
     "version:patch": "npm --no-git-tag-version version patch",
     "version:minor": "npm --no-git-tag-version version minor",
     "version:major": "npm --no-git-tag-version version major",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --verbose --detectOpenHandles",
     "test:coverage": "jest --detectOpenHandles --coverage"
   },
   "keywords": [

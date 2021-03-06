@@ -1,4 +1,4 @@
-import Leaderboard from "../../lib/Leaderboard"
+import { Leaderboard } from "../../lib/Leaderboard"
 import { User, userId } from "../../lib/types"
 
 export const LBTestMethods = (LB: Leaderboard) => {

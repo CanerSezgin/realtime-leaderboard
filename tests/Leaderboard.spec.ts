@@ -1,25 +1,29 @@
-import { redisClient } from "./redisClients"
+import { redisClient, ioRedisClient } from "./redisClients"
 import { RedisClientType } from "../lib/CustomRedisClient"
 import { Leaderboard, LeaderboardOptions, LeaderboardUpdateOptions } from "../lib/Leaderboard"
 import { createUsersWithScore } from "./helper/user"
 import { LBTestMethods, getIndexOfUser, getSortedList, getUsersBetween } from "./helper/leaderboardHelpers"
 
-describe('Leaderboard with (redis). Happy Path Tests', () => {
+describe.each([
+    [redisClient, RedisClientType.RedisClient, "redis"],
+    [ioRedisClient, RedisClientType.Redis, "ioredis"]
+])('Leaderboard with ($clientName). Happy Path Tests', (client, clientType, clientName) => {
+
     let LB: Leaderboard;
-    const leaderleaderboardId = "leaderboard_test_redis"
+    const leaderleaderboardId = `leaderboard_test_${clientName}`
     const lbOptions: LeaderboardOptions = {
         update: LeaderboardUpdateOptions.createOnly
     }
     const users = createUsersWithScore(5);
     const firstUser = users[0];
 
-    it("create leaderboard with 'redis'", async () => {
-        LB = new Leaderboard(redisClient, leaderleaderboardId, lbOptions)
+    it("create leaderboard", async () => {
+        LB = new Leaderboard(client, leaderleaderboardId, lbOptions)
         expect(LB).toEqual(expect.objectContaining({
             leaderboardId: leaderleaderboardId,
             opts: expect.any(Object),
             client: expect.any(Object),
-            clientType: RedisClientType.RedisClient
+            clientType
         }))
     })
 

@@ -51,11 +51,12 @@ const  lb = new  Leaderboard(redisClient, "leaderboardId", { update: "createAndU
 ### Leaderboard Method Example
 
 ```
-await  lb.updateUser("user1", 15) 				// creates user1 since user not exist
-await  lb.createUser("user2", 32) 				// creates user2
-await  lb.updateUser("user1", 200) 				// update user1 since newScore is greater
-const  board = await  lb.getListBetween(1, 7); 	// [{ user1 }, { user2 }]
-const  rank = await  lb.getRank("user2")		// 2
+await lb.updateUser("user1", 15) 				// creates user1 since user not exist
+await lb.createUser("user2", 32) 				// creates user2
+await lb.updateUser("user1", 200) 				// update user1 since newScore is greater
+const board = await  lb.getListBetween(1, 7); 	// [{ user1 }, { user2 }]
+const rank = await  lb.getRank("user1")		    // 1
+const score = await lb.getScore("user1")        // 200
 ```
 
 See more **<a href="">Score Update Strategies</a>**

@@ -37,14 +37,14 @@ export class CustomRedisClient {
 
         } else if (type === RedisClientType.Redis) {
             this.type = type;
-            this.get = () => { }
-            this.set = () => { }
-            this.del = () => { }
-            this.zrange = () => { }
-            this.zadd = () => { }
-            this.zscore = () => { }
-            this.zrevrange = () => { }
-            this.zrevrank = () => { }
+            this.get = redisClient.get.bind(redisClient)
+            this.set = redisClient.set.bind(redisClient)
+            this.del = redisClient.del.bind(redisClient)
+            this.zrange = redisClient.zrange.bind(redisClient)
+            this.zadd = redisClient.zadd.bind(redisClient)
+            this.zscore = redisClient.zscore.bind(redisClient)
+            this.zrevrange = redisClient.zrevrange.bind(redisClient)
+            this.zrevrank = redisClient.zrevrank.bind(redisClient)
         } else {
             throw Error(`Redis client is not supported. Supported Clients: { redis, ioredis }
             Install One of Redis Packages
