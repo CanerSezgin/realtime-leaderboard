@@ -1,6 +1,6 @@
 {
   "name": "realtime-leaderboard",
-  "version": "0.8.1",
+  "version": "0.8.5",
   "description": "Real-time powerful leaderboard with Redis",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,6 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon --watch 'lib/**/*.ts' --ignore 'lib/**/*.spec.ts' --exec 'ts-node' lib/index.ts --exec 'jest --detectOpenHandles || true'",
-    "publish": "npm run build && npm publish --access public",
     "version:patch": "npm --no-git-tag-version version patch",
     "version:minor": "npm --no-git-tag-version version minor",
     "version:major": "npm --no-git-tag-version version major",
@@ -28,6 +27,9 @@
     "competition",
     "real-time"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Caner Sezgin <ccanersezgin@gmail.com>",
   "repository": "https://github.com/CanerSezgin/realtime-leaderboard",
   "homepage": "https://github.com/CanerSezgin/realtime-leaderboard",

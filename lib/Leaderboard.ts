@@ -127,6 +127,7 @@ export class Leaderboard {
       endRank - 1,
       "WITHSCORES"
     );
+    console.log({result})
     return Leaderboard.zrevrangeResponse(result, startRank);
   }
   private static zrevrangeResponse(rangeResponse: string[], startRank: number): UserInLeaderboard[] {

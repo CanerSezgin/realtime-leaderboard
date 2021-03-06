@@ -37,7 +37,7 @@ const  redisClient = redis.createClient({host:  "localhost",port:  6379})
 #### ioredis client initilization <a href="https://www.npmjs.com/package/ioredis">more</a>
 
 ```
-const { Redis } = require('ioredis');
+const Redis = require('ioredis');
 const redisClient =  new  Redis({ host:  "localhost", port:  6379});
 ```
 
