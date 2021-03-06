@@ -5,9 +5,9 @@ import { createUsersWithScore } from "./helper/user"
 import { LBTestMethods, getIndexOfUser, getSortedList, getUsersBetween } from "./helper/leaderboardHelpers"
 
 describe.each([
-    [redisClient, RedisClientType.RedisClient, "redis"],
-    [ioRedisClient, RedisClientType.Redis, "ioredis"]
-])('Leaderboard with ($clientName). Happy Path Tests', (client, clientType, clientName) => {
+    ["redis", redisClient, RedisClientType.RedisClient],
+    ["ioredis", ioRedisClient, RedisClientType.Redis]
+])('Leaderboard with (%s). Happy Path Tests', (clientName, client, clientType) => {
 
     let LB: Leaderboard;
     const leaderleaderboardId = `leaderboard_test_${clientName}`

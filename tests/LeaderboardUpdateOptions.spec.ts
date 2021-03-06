@@ -4,9 +4,9 @@ import { Leaderboard, LeaderboardOptions, LeaderboardUpdateOptions } from "../li
 import { createUserWithScore } from "./helper/user"
 
 describe.each([
-    [redisClient, "redis"],
-    [ioRedisClient, "ioredis"]
-])('Leaderboard Update Options Tests ($clientName)', (client, clientName) => {
+    ["redis", redisClient],
+    ["ioredis", ioRedisClient]
+])('Leaderboard Update Options Tests (%s)', (clientName, client) => {
 
     describe('createOnly', () => {
         const user = createUserWithScore();

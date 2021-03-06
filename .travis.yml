@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - stable
+services:
+  - redis-server
+cache:
+  directories:
+    - "node_modules"
+after_success:
+  - codecov
